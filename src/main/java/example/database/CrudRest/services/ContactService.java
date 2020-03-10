@@ -1,4 +1,4 @@
-package example.database.CrudRest.controllers;
+package example.database.CrudRest.services;
 
 import java.util.List;
 
@@ -11,16 +11,17 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import example.database.CrudRest.models.Contact;
-import example.database.CrudRest.models.ContactRepository;
+
+import example.database.CrudRest.infra.ContactRepository;
+import example.database.CrudRest.models.ContactModel;
 
 @RestController
 @RequestMapping({ "/contacts" })
-public class ContactController {
+public class ContactService {
 
 	private ContactRepository repository;
 
-	ContactController(ContactRepository contactRepository) {
+	ContactService(ContactRepository contactRepository) {
 		this.repository = contactRepository;
 	}
 
@@ -44,7 +45,7 @@ public class ContactController {
 	// Criando um novo contato (POST /contacts)
 
 	@PostMapping
-	public Contact create(@RequestBody Contact contact) {
+	public ContactModel create(@RequestBody ContactModel contact) {
 		return repository.save(contact);
 	}
 	
@@ -52,13 +53,13 @@ public class ContactController {
 	@SuppressWarnings("rawtypes")
 	@PutMapping(value="/{id}")
 	public ResponseEntity update(@PathVariable("id") long id,
-	                                      @RequestBody Contact contact) {
+	                                      @RequestBody ContactModel contact) {
 	   return repository.findById(id)
 	           .map(record -> {
 	               record.setName(contact.getName());
 	               record.setEmail(contact.getEmail());
 	               record.setPhone(contact.getPhone());
-	               Contact updated = repository.save(record);
+	               ContactModel updated = repository.save(record);
 	               return ResponseEntity.ok().body(updated);
 	           }).orElse(ResponseEntity.notFound().build());
 	}

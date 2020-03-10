@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
-public class Contact {
+public class ContactModel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	
